@@ -20,7 +20,7 @@ Player player_create(int screen_width, int screen_height,
   p.current_ammo = AMMO_PCN;
   p.active = true;
 
-  SDL_Surface *surface = IMG_Load("assets/ship_neutral.png");
+  SDL_Surface *surface = IMG_Load("assets/ships/ship_neutral.png");
   if (!surface) {
     printf("Failed to load image! IMG_Error: %s\n", IMG_GetError());
     p.texture = NULL;
