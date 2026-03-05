@@ -20,8 +20,8 @@ static const SDL_FPoint test_path[] = {
 
 static SDL_FPoint formation_positions[5];
 
-void game_init(GameState *state) {
-  state->player = player_create(SCREEN_WIDTH, SCREEN_HEIGHT);
+void game_init(GameState *state, SDL_Renderer *renderer) {
+  state->player = player_create(SCREEN_WIDTH, SCREEN_HEIGHT, renderer);
 
   for (int i = 0; i < 5; i++) {
     formation_positions[i].x = (SCREEN_WIDTH / 6.0f) * (i + 1);
@@ -162,13 +162,7 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer) {
   if (state->player.active) {
     SDL_Rect playerRect = {(int)state->player.x, (int)state->player.y,
                            state->player.width, state->player.height};
-
-    if (state->player.current_ammo == AMMO_PCN) {
-      SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    } else {
-      SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    }
-    SDL_RenderFillRect(renderer, &playerRect);
+    SDL_RenderCopy(renderer, state->player.texture, NULL, &playerRect);
   }
 
   for (int i = 0; i < MAX_BULLETS; i++) {

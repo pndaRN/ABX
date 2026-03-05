@@ -1,28 +1,41 @@
 #include "game.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 #include <stdbool.h>
+
 int main() {
+  int result = 0;
+  SDL_Window *window = NULL;
+  SDL_Renderer *renderer = NULL;
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not init! SDL_Error: %s\n", SDL_GetError());
-    return 1;
+    result = 1;
+    goto cleanup;
   }
 
-  SDL_Window *window =
+  window =
       SDL_CreateWindow("Galaga", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                        SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
   if (window == NULL) {
     printf("Window could not be created. SDL_Error: %s\n", SDL_GetError());
-    SDL_Quit();
-    return 1;
+    result = 1;
+    goto cleanup;
   }
 
-  SDL_Renderer *renderer = SDL_CreateRenderer(
+  renderer = SDL_CreateRenderer(
       window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+  if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+    printf("SDL_image could not init! IMG_Error: %s\n", IMG_GetError());
+    result = 1;
+    goto cleanup;
+  }
+
   GameState state;
-  game_init(&state);
+  game_init(&state, renderer);
 
   bool running = true;
   SDL_Event event;
@@ -40,9 +53,13 @@ int main() {
     game_update(&state, deltaTime, keystate);
     game_render(&state, renderer);
   }
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
 
-  return 0;
+cleanup:
+  if (renderer)
+    SDL_DestroyRenderer(renderer);
+  if (window)
+    SDL_DestroyWindow(window);
+  IMG_Quit();
+  SDL_Quit();
+  return result;
 }

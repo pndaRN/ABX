@@ -1,16 +1,29 @@
 #include "player.h"
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 
-Player player_create(int screen_width, int screen_height) {
+Player player_create(int screen_width, int screen_height,
+                     SDL_Renderer *renderer) {
   Player p;
 
-  p.width = 50;
-  p.height = 50;
+  p.width = 64;
+  p.height = 128;
   p.x = (screen_width / 2.0f) - (p.width / 2.0f);
   p.y = screen_height - p.height - 20;
   p.speed = 300;
 
   p.current_ammo = AMMO_PCN;
   p.active = true;
+
+  SDL_Surface *surface = IMG_Load("assets/ship_neutral.png");
+  if (!surface) {
+    printf("Failed to load image! IMG_Error: %s\n", IMG_GetError());
+    p.texture = NULL;
+  } else {
+    p.texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+  }
 
   return p;
 }

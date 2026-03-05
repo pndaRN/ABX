@@ -31,7 +31,7 @@ typedef struct {
   int level;
 } GameState;
 
-void game_init(GameState *state);
+void game_init(GameState *state, SDL_Renderer *renderer);
 void game_render(const GameState *state, SDL_Renderer *renderer);
 void game_update(GameState *state, float deltaTime, const Uint8 *keystate);
 void game_handle_events(GameState *state, SDL_Event *event, bool *running);
