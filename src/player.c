@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
+#include <stdio.h>
 
 Player player_create(int screen_width, int screen_height,
                      SDL_Renderer *renderer) {
@@ -23,9 +24,18 @@ Player player_create(int screen_width, int screen_height,
   SDL_Surface *surface = IMG_Load("assets/ships/ship_neutral.png");
   if (!surface) {
     printf("Failed to load image! IMG_Error: %s\n", IMG_GetError());
-    p.texture = NULL;
+    p.ship_texture = NULL;
   } else {
-    p.texture = SDL_CreateTextureFromSurface(renderer, surface);
+    p.ship_texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+  }
+
+  surface = IMG_Load("assets/weapons/base_shot.png");
+  if (!surface) {
+    printf("Failed to load image! IMG_Error: %s\n", IMG_GetError());
+    p.bullet_texture = NULL;
+  } else {
+    p.bullet_texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
   }
 
