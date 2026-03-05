@@ -163,6 +163,14 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer) {
     SDL_Rect playerRect = {(int)state->player.x, (int)state->player.y,
                            state->player.width, state->player.height};
     SDL_RenderCopy(renderer, state->player.texture, NULL, &playerRect);
+
+    // HITBOX TEST
+
+    // SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    // SDL_Rect hbRect = {(int)(state->player.x + state->player.hb_offset_x),
+    //                   (int)(state->player.y + state->player.hb_offset_y),
+    //                   state->player.hb_width, state->player.hb_height};
+    // SDL_RenderDrawRect(renderer, &hbRect);
   }
 
   for (int i = 0; i < MAX_BULLETS; i++) {
@@ -216,10 +224,11 @@ static void game_handle_collisions(GameState *state) {
   }
   for (int i = 0; i < MAX_ENEMIES; i++) {
     if (state->enemies[i].active) {
-      if (check_collision(state->player.x, state->player.y, state->player.width,
-                          state->player.height, state->enemies[i].x,
-                          state->enemies[i].y, state->enemies[i].width,
-                          state->enemies[i].height)) {
+      if (check_collision(state->player.hb_offset_x + state->player.x,
+                          state->player.hb_offset_y + state->player.y,
+                          state->player.hb_width, state->player.hb_height,
+                          state->enemies[i].x, state->enemies[i].y,
+                          state->enemies[i].width, state->enemies[i].height)) {
         state->player.active = false;
         state->enemies[i].active = false;
         state->mode = STATE_GAME_OVER;

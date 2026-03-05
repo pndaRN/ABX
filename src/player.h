@@ -9,7 +9,7 @@ typedef enum { AMMO_PCN, AMMO_POLYMYXIN } AmmoType;
 typedef struct {
   float x, y;
   int width, height;
-  float hb_x, hb_y;
+  int hb_offset_x, hb_offset_y;
   int hb_width, hb_height;
   float speed;
   AmmoType current_ammo;

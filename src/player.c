@@ -11,6 +11,10 @@ Player player_create(int screen_width, int screen_height,
   p.height = 128;
   p.x = (screen_width / 2.0f) - (p.width / 2.0f);
   p.y = screen_height - p.height - 20;
+  p.hb_height = 65;
+  p.hb_width = 22;
+  p.hb_offset_x = (p.width - p.hb_width) / 2.0f;
+  p.hb_offset_y = (p.height - p.hb_height) / 2.0f + 10.0f;
   p.speed = 300;
 
   p.current_ammo = AMMO_PCN;
