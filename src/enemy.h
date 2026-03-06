@@ -17,7 +17,7 @@ typedef enum {
 
 typedef struct Enemy {
   float x, y, speed;
-  int width, height;
+  int width, height, health;
   bool active;
   Uint64 state_start_time;
   EnemyState state;

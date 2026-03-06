@@ -13,6 +13,7 @@ Enemy enemy_init(SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2, SDL_FPoint p3,
 
   e.width = 50;
   e.height = 50;
+  e.health = 6;
   e.speed = speed;
   e.active = true;
 

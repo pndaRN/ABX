@@ -18,19 +18,25 @@ Player player_create(int screen_width, int screen_height,
   p.hb_offset_y = (p.height - p.hb_height) / 2.0f + 10.0f;
   p.speed = 300;
 
-  p.current_ammo = AMMO_PCN;
+  p.current_ammo = AMMO_NEUTRAL;
   p.active = true;
 
-  SDL_Surface *surface = IMG_Load("assets/ships/ship_neutral.png");
-  if (!surface) {
-    printf("Failed to load image! IMG_Error: %s\n", IMG_GetError());
-    p.ship_texture = NULL;
-  } else {
-    p.ship_texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
+  const char *ship_paths[AMMO_COUNT] = {"assets/ships/ship_neutral.png",
+                                        "assets/ships/ship_pcn.png",
+                                        "assets/ships/ship_pmx.png"};
+
+  for (int i = 0; i < AMMO_COUNT; i++) {
+    SDL_Surface *surface = IMG_Load(ship_paths[i]);
+    if (!surface) {
+      printf("Failed to load image! IMG_Error: %s\n", IMG_GetError());
+      p.ship_texture[i] = NULL;
+    } else {
+      p.ship_texture[i] = SDL_CreateTextureFromSurface(renderer, surface);
+      SDL_FreeSurface(surface);
+    }
   }
 
-  surface = IMG_Load("assets/weapons/base_shot.png");
+  SDL_Surface *surface = IMG_Load("assets/weapons/base_shot.png");
   if (!surface) {
     printf("Failed to load image! IMG_Error: %s\n", IMG_GetError());
     p.bullet_texture = NULL;

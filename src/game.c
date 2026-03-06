@@ -1,6 +1,7 @@
 #include "game.h"
 #include "collision.h"
 #include "enemy.h"
+#include "player.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
@@ -124,18 +125,12 @@ void game_handle_events(GameState *state, SDL_Event *event, bool *running) {
         }
       }
       if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_e) {
-        if (state->player.current_ammo == AMMO_PCN) {
-          state->player.current_ammo = AMMO_POLYMYXIN;
-        } else {
-          state->player.current_ammo = AMMO_PCN;
-        }
+        state->player.current_ammo =
+            (state->player.current_ammo + 1) % AMMO_COUNT;
       }
       if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_q) {
-        if (state->player.current_ammo == AMMO_PCN) {
-          state->player.current_ammo = AMMO_POLYMYXIN;
-        } else {
-          state->player.current_ammo = AMMO_PCN;
-        }
+        state->player.current_ammo =
+            (state->player.current_ammo + AMMO_COUNT - 1) % AMMO_COUNT;
       }
       if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_ESCAPE) {
         state->mode = STATE_PAUSED;
@@ -162,7 +157,9 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer) {
   if (state->player.active) {
     SDL_Rect playerRect = {(int)state->player.x, (int)state->player.y,
                            state->player.width, state->player.height};
-    SDL_RenderCopy(renderer, state->player.ship_texture, NULL, &playerRect);
+    SDL_RenderCopy(renderer,
+                   state->player.ship_texture[state->player.current_ammo], NULL,
+                   &playerRect);
 
     // HITBOX TEST
 
@@ -209,6 +206,13 @@ static void game_handle_collisions(GameState *state) {
                              (state->bullets[i].type == AMMO_POLYMYXIN &&
                               def->gram_type == GRAM_NEGATIVE);
             if (effective) {
+              state->enemies[j].health -= 6;
+            } else if (state->bullets[i].type == AMMO_NEUTRAL) {
+              state->enemies[j].health -= 3;
+            } else if (!effective) {
+              state->enemies[j].health -= 2;
+            }
+            if (state->enemies[j].health <= 0) {
               state->enemies[j].active = false;
             }
             state->bullets[i].active = false;
