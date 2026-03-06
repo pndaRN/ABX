@@ -162,7 +162,7 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer) {
   if (state->player.active) {
     SDL_Rect playerRect = {(int)state->player.x, (int)state->player.y,
                            state->player.width, state->player.height};
-    SDL_RenderCopy(renderer, state->player.texture, NULL, &playerRect);
+    SDL_RenderCopy(renderer, state->player.ship_texture, NULL, &playerRect);
 
     // HITBOX TEST
 
@@ -174,15 +174,10 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer) {
   }
 
   for (int i = 0; i < MAX_BULLETS; i++) {
-    if (state->bullets[i].active) {
+    if (state->bullets[i].active && state->bullets[i].texture) {
       SDL_Rect bulletRect = {(int)state->bullets[i].x, (int)state->bullets[i].y,
                              state->bullets[i].width, state->bullets[i].height};
-      if (state->bullets[i].type == AMMO_PCN) {
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-      } else {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-      }
-      SDL_RenderFillRect(renderer, &bulletRect);
+      SDL_RenderCopy(renderer, state->bullets[i].texture, NULL, &bulletRect);
     }
   }
   for (int i = 0; i < MAX_ENEMIES; i++) {
@@ -196,6 +191,7 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer) {
     }
   }
 }
+
 static void game_handle_collisions(GameState *state) {
   for (int i = 0; i < MAX_BULLETS; i++) {
     if (state->bullets[i].active) {

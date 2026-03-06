@@ -12,6 +12,7 @@ typedef struct {
   int width, height;
   bool active;
   AmmoType type;
+  SDL_Texture *texture;
 } Bullet;
 
 Bullet bullet_init(Player *player);
