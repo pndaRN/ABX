@@ -49,6 +49,9 @@ Player player_create(int screen_width, int screen_height,
       p.bullet_texture[i] = SDL_CreateTextureFromSurface(renderer, surface);
       SDL_FreeSurface(surface);
     }
+
+    p.bullet_width[i] = bw[i];
+    p.bullet_height[i] = bh[i];
   }
   return p;
 }

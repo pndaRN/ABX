@@ -3,8 +3,8 @@
 Bullet bullet_init(Player *player) {
   Bullet b;
 
-  b.width = 8;
-  b.height = 23;
+  b.width = player->bullet_width[player->current_ammo];
+  b.height = player->bullet_height[player->current_ammo];
 
   b.x = player->x + (player->width / 2.0f) - (b.width / 2.0f);
   b.y = player->y;
@@ -14,7 +14,7 @@ Bullet bullet_init(Player *player) {
 
   b.type = player->current_ammo;
 
-  b.texture = player->bullet_texture;
+  b.texture = player->bullet_texture[player->current_ammo];
 
   return b;
 }
