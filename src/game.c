@@ -49,7 +49,6 @@ void game_init(GameState *state, SDL_Renderer *renderer) {
     state->enemies[i].active = false;
   }
 
-  state->spawn_timer = 0.0f;
   state->current_wave = 0;
   state->level = 1;
   state->mode = STATE_MENU;

@@ -1,6 +1,5 @@
 #ifndef PROCEDURAL_H
 #define PROCEDURAL_H
-#include <SDL2/SDL.h>
 
 typedef struct {
     int total_enemies, max_simult_divers; 

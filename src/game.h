@@ -8,7 +8,7 @@
 #include "collision.h"
 #include "enemy.h"
 #include "player.h"
-#include "wave.h"
+#include "level.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 
@@ -24,12 +24,8 @@ typedef struct {
   Player player;
   Bullet bullets[MAX_BULLETS];
   Enemy enemies[MAX_ENEMIES];
-  Wave wave;
+  Level level;
   GameState_Mode mode;
-
-  float spawn_timer;
-  int current_wave;
-  int level;
 } GameState;
 
 void game_init(GameState *state, SDL_Renderer *renderer);
