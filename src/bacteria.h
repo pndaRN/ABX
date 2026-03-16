@@ -5,6 +5,8 @@
 #include <SDL2/SDL_rect.h>
 #include <stdbool.h>
 
+#include "player.h"
+
 typedef struct Enemy Enemy;
 
 typedef enum { DIVE_SINE, DIVE_SCATTER, DIVE_ZIGZAG, DIVE_SWEEP } DiveType;
@@ -15,7 +17,6 @@ typedef enum {
   SPECIES_PSEUDOMONAS
 } BacteriaSpecies;
 
-typedef enum { GRAM_POSITIVE, GRAM_NEGATIVE } GramType;
 
 typedef enum { IS_BURSTING, IS_PAUSING, IS_DIVING } ScatterPhase;
 typedef enum { DASHING, PAUSING } ZigZagPhase;
@@ -55,7 +56,7 @@ typedef void (*DiveUpdateFn)(Enemy *e, float deltaTime, int screen_height,
 
 typedef struct {
   BacteriaSpecies species;
-  GramType gram_type;
+  AmmoType weakness;
   DiveType dive_type;
   DiveInitFn dive_init;
   DiveUpdateFn dive_update;
