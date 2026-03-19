@@ -10,21 +10,18 @@
 typedef struct {
   int total_enemies;
   int spawn_count;
-  float speed;
-  float spawn_delay;
-  float spawn_timer;
-  float dive_timer;
-  float dive_delay;
+  float speed, threshold;
+  float spawn_delay, spawn_timer;
+  float dive_delay, dive_timer;
 
   int *enemy_indices;
 
-  bool formation_complete;
+  bool is_active, formation_complete, threshold_crossed;
   Uint64 formation_complete_time;
 
   SDL_FPoint control_points[4];
   SDL_FPoint *formation_positions;
 
-  bool is_active;
   int screen_height, screen_width;
 } Wave;
 

@@ -10,13 +10,14 @@ Wave wave_init(WaveParams *wp, SDL_FPoint p0, SDL_FPoint p1,
   w.enemy_indices = (int *)malloc(w.total_enemies * sizeof(int));
 
   w.speed = wp -> speed;
+  w.spawn_delay = wp -> spawn_delay;
+  w.dive_delay = wp -> dive_delay;
+  w.threshold = wp -> threshold;
+  w.threshold_crossed = false;
 
   w.spawn_count = 0;
-  w.spawn_delay = wp -> spawn_delay;
   w.spawn_timer = 0.3f;
   w.dive_timer = 0.0;
-  w.dive_delay = wp -> dive_delay;
-
   w.formation_complete = false;
   w.formation_complete_time = 0;
 
@@ -103,12 +104,18 @@ void wave_update(Wave *w, float deltaTime, Enemy *e, int max_enemies) {
   }
 
   // CHECKS IF ALL ENEMIES IN WAVE ARE INACTIVE
-  bool all_dead = true;
+  int active_count = 0;
+  bool all_dead;
   for (int i = 0; i < w->spawn_count; i++) {
     if (e[w->enemy_indices[i]].active) {
-      all_dead = false;
-      break;
+      active_count++;
     }
+  }
+  all_dead = active_count == 0;
+  int killed = w->total_enemies -active_count;
+  float percentage_killed = (float)killed / w->total_enemies;
+  if (percentage_killed >= w->threshold) {
+    w->threshold_crossed = true; 
   }
   if (all_dead && w->spawn_count == w->total_enemies) {
     w->is_active = false;
