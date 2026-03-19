@@ -31,3 +31,14 @@ Level level_init(int level, int screen_height, int screen_width) {
     
     return l;
 }
+
+void level_update(Level *l, float deltaTime, Enemy *e, int max_enemies) {
+    for (int i = 0; i < MAX_WAVES; i++) {
+        if (l->waves[i].is_active){
+            wave_update(&l->waves[i], deltaTime, e, max_enemies);
+            if(l->wave[i].threshold_crossed) {
+                // Need to put in wave vs level logic here
+            }
+        }
+    }
+}
