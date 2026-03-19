@@ -10,7 +10,7 @@ typedef struct {
     int wave_count, level;
 } Level;
 
-Level level_init(int level);
+Level level_init(int level, int screen_height, int screen_width);
 void level_update(Level *l, float deltaTime, Enemy *e, int max_enemies);
 void level_free(Level *l);
 

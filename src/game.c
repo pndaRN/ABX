@@ -12,30 +12,10 @@
 static void game_handle_collisions(GameState *state);
 static void render_game_world(const GameState *state, SDL_Renderer *renderer);
 
-static const SDL_FPoint test_path[] = {
-    {640, -50},
-    {900, 50},
-    {900, 150},
-    {640, 200},
-};
 
-static SDL_FPoint formation_positions[5];
 
 void game_init(GameState *state, SDL_Renderer *renderer) {
   state->player = player_create(SCREEN_WIDTH, SCREEN_HEIGHT, renderer);
-
-  for (int i = 0; i < 5; i++) {
-    formation_positions[i].x = (SCREEN_WIDTH / 6.0f) * (i + 1);
-    formation_positions[i].y = 200.0f;
-  }
-
-  WaveParams wp = {
-    .total_enemies = 5,
-    .max_simult_divers = 1,
-    .speed = 400.0f,
-    .spawn_delay = 0.3f,
-    .dive_delay = 2.0f
-  };
 
   state->wave =
       wave_init(&wp, test_path[0], test_path[1], test_path[2],
