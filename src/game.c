@@ -2,6 +2,7 @@
 #include "collision.h"
 #include "enemy.h"
 #include "player.h"
+#include "shared_types.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
@@ -184,15 +185,16 @@ static void game_handle_collisions(GameState *state) {
                               state->enemies[j].x, state->enemies[j].y,
                               state->enemies[j].width,
                               state->enemies[j].height)) {
-            const BacteriaDefinition *def =
+            const BacteriaDefinition *bacteria_def =
                 get_bacteria_def(state->enemies[j].species);
-            const WeaponDefinition *wdef =
+            const WeaponDefinition *weapon_def =
                 get_weapon_def(state->bullets[i].type);
-            if (wdef->effectiveness == def->gram_type ||
-                wdef->effectiveness == GRAM_BOTH) {
-              state->enemies[j].health -= wdef->damage_effective;
+            if (weapon_def->type == WEAPON_NEUTRAL) {
+              state->enemies[j].health -= weapon_def->damage_neutral;
+            } else if (weapon_def->type == bacteria_def->weakness) {
+              state->enemies[j].health -= weapon_def->damage_effective;
             } else {
-              state->enemies[j].health -= wdef->damage_ineffective;
+              state->enemies[j].health -= weapon_def->damage_ineffective;
             }
             if (state->enemies[j].health <= 0) {
               state->enemies[j].active = false;
