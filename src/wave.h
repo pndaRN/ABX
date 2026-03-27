@@ -25,8 +25,8 @@ typedef struct {
   int screen_height, screen_width;
 } Wave;
 
-Wave wave_init(WaveParams *wp, SDL_FPoint p0, SDL_FPoint p1,
-               SDL_FPoint p2, SDL_FPoint p3, SDL_FPoint *formation_positions,
+Wave wave_init(WaveParams *wp, SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2,
+               SDL_FPoint p3, SDL_FPoint *formation_positions,
                int screen_height, int screen_width);
 
 void wave_update(Wave *w, float deltaTime, Enemy *e, int max_enemies);
