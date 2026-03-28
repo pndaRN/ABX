@@ -9,7 +9,6 @@ Wave wave_init(WaveParams *wp, SDL_FPoint p0, SDL_FPoint p1,
   w.total_enemies = wp -> total_enemies;
   w.enemy_indices = (int *)malloc(w.total_enemies * sizeof(int));
 
-  w.speed = wp -> speed;
   w.spawn_delay = wp -> spawn_delay;
   w.dive_delay = wp -> dive_delay;
   w.threshold = wp -> threshold;

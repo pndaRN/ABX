@@ -5,7 +5,7 @@ WaveParams level_to_params(int level) {
 
     wp.total_enemies = 5;
     wp.max_simult_divers = 1;
-    wp.speed = 400.0f;
+    wp.speed_scalar = 1.0f;
     wp.spawn_delay = 0.3f;
     wp.dive_delay = 2.0f;
     wp.threshold = .8;

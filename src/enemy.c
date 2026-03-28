@@ -6,8 +6,7 @@
 #include <math.h>
 // #include <stdlib.h>
 
-Enemy enemy_init(SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2, SDL_FPoint p3,
-                 float speed, SDL_FPoint formation_position,
+Enemy enemy_init(SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2, SDL_FPoint p3, SDL_FPoint formation_position,
                  BacteriaSpecies species, int screen_height, int screen_width) {
   Enemy e;
 
