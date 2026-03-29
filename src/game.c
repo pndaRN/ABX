@@ -1,6 +1,7 @@
 #include "game.h"
 #include "collision.h"
 #include "enemy.h"
+#include "level.h"
 #include "player.h"
 #include "shared_types.h"
 
@@ -15,10 +16,7 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer);
 
 void game_init(GameState *state, SDL_Renderer *renderer) {
   state->player = player_create(SCREEN_WIDTH, SCREEN_HEIGHT, renderer);
-
-  state->wave =
-      wave_init(&wp, test_path[0], test_path[1], test_path[2], test_path[3],
-                formation_positions, SCREEN_HEIGHT, SCREEN_WIDTH);
+  state->level = level_init(1, SCREEN_HEIGHT, SCREEN_WIDTH);
 
   for (int i = 0; i < MAX_BULLETS; i++) {
     state->bullets[i].active = false;
@@ -27,9 +25,6 @@ void game_init(GameState *state, SDL_Renderer *renderer) {
   for (int i = 0; i < MAX_ENEMIES; i++) {
     state->enemies[i].active = false;
   }
-
-  state->current_wave = 0;
-  state->level = 1;
   state->mode = STATE_MENU;
 
   srand(time(NULL));
@@ -48,6 +43,8 @@ void game_render(const GameState *state, SDL_Renderer *renderer) {
   case STATE_GAME_OVER:
     render_game_world(state, renderer);
     break;
+  case STATE_LEVEL_TRANSITION:
+    break;
   }
   SDL_RenderPresent(renderer);
 }
@@ -58,7 +55,7 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
     break;
   case STATE_PLAYING:
     player_update(&state->player, keystate, deltaTime, SCREEN_WIDTH);
-    wave_update(&state->wave, deltaTime, state->enemies, MAX_ENEMIES);
+    level_update(&state->level, deltaTime, state->enemies, MAX_ENEMIES);
     for (int i = 0; i < MAX_BULLETS; i++) {
       if (state->bullets[i].active) {
         bullet_update(&state->bullets[i], deltaTime);
@@ -76,6 +73,8 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
   case STATE_PAUSED:
     break;
   case STATE_GAME_OVER:
+    break;
+  case STATE_LEVEL_TRANSITION:
     break;
   }
 }
@@ -131,6 +130,8 @@ void game_handle_events(GameState *state, SDL_Event *event, bool *running) {
       if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_ESCAPE) {
         state->mode = STATE_MENU;
       }
+      break;
+    case STATE_LEVEL_TRANSITION:
       break;
     }
   }
@@ -189,9 +190,10 @@ static void game_handle_collisions(GameState *state) {
                 get_bacteria_def(state->enemies[j].species);
             const WeaponDefinition *weapon_def =
                 get_weapon_def(state->bullets[i].type);
-            state->enemies[j].health -= calculate_damage(bacteria_def, weapon_def);
+            state->enemies[j].health -=
+                calculate_damage(weapon_def, bacteria_def);
             if (state->enemies[j].health <= 0) {
-              state->enemies[j].is_active = false;
+              state->enemies[j].active = false;
             }
             state->bullets[i].active = false;
             break;

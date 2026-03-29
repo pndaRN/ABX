@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
+#include "bacteria.h"
 #include "shared_types.h"
 
 typedef struct {
@@ -14,5 +15,7 @@ typedef struct {
 } WeaponDefinition;
 
 const WeaponDefinition *get_weapon_def(WeaponType type);
+int calculate_damage(const WeaponDefinition *weapon,
+                     const BacteriaDefinition *bacteria);
 
 #endif
