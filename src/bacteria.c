@@ -180,8 +180,8 @@ static const BacteriaDefinition BACTERIA_DEFS[] = {
      .b = 0,
      .health = 6,
      .base_speed = 400.0f,
-     .width = 50,
-     .height = 50},
+     .width = 30,
+     .height = 30},
 
     {.species = SPECIES_STAPHYLOCOCCUS,
      .weakness = WEAPON_PCN,

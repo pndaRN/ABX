@@ -17,6 +17,11 @@ typedef struct {
   float speed_scalar, spawn_delay, dive_delay, threshold;
 } WaveParams;
 
+typedef struct {
+  FormationType type;
+  int max_per_row;
+} FormationDefinition;
+
 WaveParams level_to_params(int level);
 
 void generate_formation(SDL_FPoint *positions, int total_enemies,

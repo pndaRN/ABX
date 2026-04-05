@@ -28,6 +28,15 @@ void generate_formation(SDL_FPoint *positions, int total_enemies,
     }
     break;
   case FORMATION_TYPE_V:
-
+    int middle = total_enemies / 2;
+    for (int i = 0; i < total_enemies; i++) {
+      positions[i].x = (screen_width / (float)(total_enemies + 1)) * (i + 1);
+      positions[i].y = 100.0f + 100.0f * abs(i - middle) / (float)middle;
+    }
     break;
   }
+}
+
+static const FormationDefinition FORMATION_DEFS[] = {
+    {.type = FORMATION_TYPE_LINE, .max_per_row = 7},
+};
