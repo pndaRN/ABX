@@ -59,7 +59,7 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
     if (state->level.level_end == true) {
       int new_level = state->level.level + 1;
       level_free(&state->level);
-      state-> level = level_init(new_level,SCREEN_HEIGHT, SCREEN_WIDTH);
+      state->level = level_init(new_level, SCREEN_HEIGHT, SCREEN_WIDTH);
       for (int i = 0; i < MAX_ENEMIES; i++) {
         state->enemies[i].active = false;
       }
