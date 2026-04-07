@@ -6,8 +6,4 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         make \
         libsdl2-dev \
         libsdl2-image-dev \
-        xvfb \
-        x11vnc \
-        novnc \
-        websockify \
     && rm -rf /var/lib/apt/lists/*
