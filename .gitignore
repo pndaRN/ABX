@@ -3,3 +3,5 @@ assets/
 core
 core.*
 .vscode/
+.ona/
+.devcontainer/
