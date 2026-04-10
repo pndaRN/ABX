@@ -1,8 +1,8 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g -Isrc
+CFLAGS = -Wall -Wextra -g -Isrc/engine -Isrc/content -Isrc/application
 LDFLAGS = -lSDL2 -lSDL2_image -lm 
 
-SRC = src/main.c src/player.c src/bullet.c src/enemy.c src/collision.c src/math_utils.c src/wave.c src/bacteria.c src/game.c src/weapon.c src/level.c src/procedural.c
+SRC = $(wildcard src/engine/*.c) $(wildcard src/content/*.c) $(wildcard src/application/*.c)
 OUT = game
 
 all:
