@@ -8,7 +8,6 @@ Wave wave_init(WaveParams *wp, SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2,
   Wave w;
   w.level = wp->level;
   w.total_enemies = wp->total_enemies;
-  w.enemy_indices = (int *)malloc(w.total_enemies * sizeof(int));
 
   w.spawn_delay = wp->spawn_delay;
   w.species_unlocked = wp->species_unlocked;
@@ -24,14 +23,12 @@ Wave wave_init(WaveParams *wp, SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2,
   w.formation_complete = false;
   w.formation_complete_time = 0;
 
+  memcpy(w.formation_positions, formation_positions,
+         w.total_enemies * sizeof(SDL_FPoint));
+
   w.control_points[0] = p0;
   w.control_points[1] = p1;
   w.control_points[2] = p2;
-
-  w.formation_positions =
-      (SDL_FPoint *)malloc(w.total_enemies * sizeof(SDL_FPoint));
-  memcpy(w.formation_positions, formation_positions,
-         w.total_enemies * sizeof(SDL_FPoint));
   w.is_active = true;
 
   w.screen_height = screen_height;
@@ -131,9 +128,4 @@ void wave_update(Wave *w, float deltaTime, Enemy *e, int max_enemies) {
   if (all_dead && w->spawn_count == w->total_enemies) {
     w->is_active = false;
   }
-}
-
-void wave_free(Wave *w) {
-  free(w->enemy_indices);
-  free(w->formation_positions);
 }

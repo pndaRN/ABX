@@ -1,6 +1,6 @@
 #ifndef ENEMY_H
 #define ENEMY_H
-#define MAX_ENEMIES 20
+#define MAX_ENEMIES 250
 
 #include "bacteria.h"
 #include "procedural.h"

@@ -12,8 +12,6 @@ Level level_init(int level, int screen_height, int screen_width) {
 
   for (int i = 0; i < MAX_WAVES; i++) {
     l.wave[i].is_active = false;
-    l.wave[i].enemy_indices = NULL;
-    l.wave[i].formation_positions = NULL;
   }
 
   WaveParams wp = level_to_params(l.level);
@@ -24,9 +22,6 @@ Level level_init(int level, int screen_height, int screen_width) {
   l.p1 = (SDL_FPoint){900, 50};
   l.p2 = (SDL_FPoint){900, 150};
   l.p3 = (SDL_FPoint){640, 200};
-
-  l.formation_positions =
-      (SDL_FPoint *)malloc(wp.total_enemies * sizeof(SDL_FPoint));
 
   for (int i = 0; i < wp.total_enemies; i++) {
     l.formation_positions[i].x = (screen_width / 6.0f) * (i + 1);
@@ -62,11 +57,5 @@ void level_update(Level *l, float deltaTime, Enemy *e, int max_enemies) {
         }
       }
     }
-  }
-}
-
-void level_free(Level *l) {
-  for (int i = 0; i < MAX_WAVES; i++) {
-    wave_free(&l->wave[i]);
   }
 }

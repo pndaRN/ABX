@@ -17,13 +17,13 @@ typedef struct {
   float dive_delay, dive_timer;
   float speed_scalar;
 
-  int *enemy_indices;
+  int enemy_indices[MAX_ENEMIES];
 
   bool is_active, formation_complete, threshold_crossed;
   Uint64 formation_complete_time;
 
   SDL_FPoint control_points[3];
-  SDL_FPoint *formation_positions;
+  SDL_FPoint formation_positions[MAX_ENEMIES];
 
   int screen_height, screen_width;
 } Wave;
@@ -33,7 +33,5 @@ Wave wave_init(WaveParams *wp, SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2,
                int screen_width);
 
 void wave_update(Wave *w, float deltaTime, Enemy *e, int max_enemies);
-
-void wave_free(Wave *w);
 
 #endif

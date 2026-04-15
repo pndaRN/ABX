@@ -5,10 +5,9 @@
 #define SCREEN_HEIGHT 720
 
 #include "bullet.h"
-#include "collision.h"
 #include "enemy.h"
-#include "player.h"
 #include "level.h"
+#include "player.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 
