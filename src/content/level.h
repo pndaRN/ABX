@@ -5,6 +5,8 @@
 #include "enemy.h"
 #include "wave.h"
 
+
+
 typedef struct {
   Wave wave[MAX_WAVES];
   int wave_count, level;
@@ -16,6 +18,8 @@ typedef struct {
   SDL_FPoint p0, p1, p2, p3;
   SDL_FPoint formation_positions[MAX_ENEMIES];
 
+  FormationType default_formation; 
+  FormationBounds formation_bounds;
 } Level;
 
 Level level_init(int level, int screen_height, int screen_width);

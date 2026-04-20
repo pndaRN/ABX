@@ -21,9 +21,14 @@ typedef enum {
 } PathType;
 
 typedef struct {
+  float x, y, width, height;
+} FormationBounds;
+
+typedef struct {
   int total_enemies, max_simult_divers, species_unlocked, level;
   float speed_scalar, spawn_delay, dive_delay, threshold;
   PathType path_type;
+  FormationType formation_type;
 } WaveParams;
 
 typedef struct {
@@ -44,8 +49,7 @@ typedef struct {
 WaveParams level_to_params(int level);
 
 void generate_formation(SDL_FPoint *positions, int total_enemies,
-                        int screen_width, int screen_height,
-                        FormationType type);
+                        FormationType type, FormationBounds bounds);
 
 EntryPathData generate_path(PathType type, int screen_height, int screen_width,
                             SDL_FPoint start, SDL_FPoint end);

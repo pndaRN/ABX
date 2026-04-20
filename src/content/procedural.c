@@ -15,12 +15,12 @@ WaveParams level_to_params(int level) {
   wp.dive_delay = 2.0f / (block_position * 0.5 + 0.5);
   wp.threshold = .8;
   wp.path_type = PATH_ARC;
+  wp.formation_type = FORMATION_TYPE_LINE;
   return wp;
 }
 
 void generate_formation(SDL_FPoint *positions, int total_enemies,
-                        int screen_width, int screen_height,
-                        FormationType type) {
+                        FormationType type, FormationBounds bounds) {
   switch (type) {
   case FORMATION_TYPE_LINE:
     for (int i = 0; i < total_enemies; i++) {

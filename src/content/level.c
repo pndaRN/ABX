@@ -14,6 +14,15 @@ Level level_init(int level, int screen_height, int screen_width) {
     l.wave[i].is_active = false;
   }
 
+  l.default_formation = FORMATION_TYPE_LINE;
+  
+  l.formation_bounds = (FormationBounds){
+    .x = screen_width * 0.1f,
+    .y = screen_height * 0.1f,
+    .width = screen_width * 0.8f,
+    .height = screen_height * 0.2f,
+  };
+
   WaveParams wp = level_to_params(l.level);
 
   l.end_chance = 1.0f; // TODO: procgen from level_to_params
@@ -30,6 +39,8 @@ Level level_init(int level, int screen_height, int screen_width) {
 
   l.wave[0] = wave_init(&wp, l.p0, l.p1, l.p2, l.formation_positions,
                         screen_height, screen_width);
+
+
 
   return l;
 }
