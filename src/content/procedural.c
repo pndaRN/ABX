@@ -24,16 +24,12 @@ void generate_formation(SDL_FPoint *positions, int total_enemies,
   switch (type) {
   case FORMATION_TYPE_LINE:
     for (int i = 0; i < total_enemies; i++) {
-      positions[i].x = (screen_width / (float)(total_enemies + 1)) * (i + 1);
-      positions[i].y = 200.0f;
+      positions[i].x =
+          bounds.x + ((bounds.width / (float)(total_enemies + 1)) * (i + 1));
+      positions[i].y = bounds.y + bounds.height / 2.0f;
     }
     break;
   case FORMATION_TYPE_V:
-    int middle = total_enemies / 2;
-    for (int i = 0; i < total_enemies; i++) {
-      positions[i].x = (screen_width / (float)(total_enemies + 1)) * (i + 1);
-      positions[i].y = 100.0f + 100.0f * abs(i - middle) / (float)middle;
-    }
     break;
   case FORMATION_TYPE_CIRCLE:
     break;
@@ -112,14 +108,10 @@ EntryPathData generate_path(PathType type, int screen_height, int screen_width,
 }
 
 static const SpawnPointFraction SPAWN_POINT_FACTIONS[] = {
-    {.x = -0.07f, .y = 0.33f},
-    {.x = -0.07f, .y = 0.17f}, 
-    {.x = 0.17f, .y = -0.07f}, 
-    {.x = 0.33f, .y = -0.07f},
-    {.x = 0.5f, .y = -0.07f}, 
-    {.x = 0.67f, .y = -0.07f},
-    {.x = 0.83f, .y = -0.07f}, 
-    {.x = 1.07f, .y = 0.17f},
+    {.x = -0.07f, .y = 0.33f}, {.x = -0.07f, .y = 0.17f},
+    {.x = 0.17f, .y = -0.07f}, {.x = 0.33f, .y = -0.07f},
+    {.x = 0.5f, .y = -0.07f},  {.x = 0.67f, .y = -0.07f},
+    {.x = 0.83f, .y = -0.07f}, {.x = 1.07f, .y = 0.17f},
     {.x = 1.07f, .y = 0.33f},
 };
 

@@ -15,12 +15,12 @@ Level level_init(int level, int screen_height, int screen_width) {
   }
 
   l.default_formation = FORMATION_TYPE_LINE;
-  
+
   l.formation_bounds = (FormationBounds){
-    .x = screen_width * 0.1f,
-    .y = screen_height * 0.1f,
-    .width = screen_width * 0.8f,
-    .height = screen_height * 0.2f,
+      .x = screen_width * 0.05f,
+      .y = screen_height * 0.1f,
+      .width = screen_width * 0.9f,
+      .height = screen_height * 0.2f,
   };
 
   WaveParams wp = level_to_params(l.level);
@@ -32,15 +32,11 @@ Level level_init(int level, int screen_height, int screen_width) {
   l.p2 = (SDL_FPoint){900, 150};
   l.p3 = (SDL_FPoint){640, 200};
 
-  for (int i = 0; i < wp.total_enemies; i++) {
-    l.formation_positions[i].x = (screen_width / 6.0f) * (i + 1);
-    l.formation_positions[i].y = 200.0f;
-  }
+  generate_formation(l.formation_positions, wp.total_enemies,
+                     l.default_formation, l.formation_bounds);
 
   l.wave[0] = wave_init(&wp, l.p0, l.p1, l.p2, l.formation_positions,
                         screen_height, screen_width);
-
-
 
   return l;
 }
