@@ -202,8 +202,10 @@ static const BacteriaDefinition BACTERIA_DEFS[] = {
      .b = 0,
      .health = 6,
      .base_speed = 400.0f,
-     .width = 30,
-     .height = 30,
+     .width = 32,
+     .height = 64,
+     .frame_count = 12,
+     .frame_duration = 0.8f,
      .texture_path = "assets/bacteria/strep.png"},
 
     {.species = SPECIES_STAPHYLOCOCCUS,
@@ -218,6 +220,8 @@ static const BacteriaDefinition BACTERIA_DEFS[] = {
      .base_speed = 300.0f,
      .width = 50,
      .height = 50,
+     .frame_count = 1,
+     .frame_duration = 0.0f,
      .texture_path = "assets/bacteria/staph.png"},
 
     {.species = SPECIES_ECOLI,
