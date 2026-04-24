@@ -16,7 +16,7 @@ typedef enum {
 } EnemyState;
 
 typedef struct EnemyHot {
-  float x, y, animation_timer;
+  float x, y, animation_timer, angle;
   int width, height, hb_height, hb_width, offset_x, offset_y;
   bool active;
   int health, current_frame;

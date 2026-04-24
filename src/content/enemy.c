@@ -25,6 +25,7 @@ void enemy_init(EnemyHot *hot, EnemyCold *cold, float speed_scalar,
   hot->y = path_data.control_points[0].y;
   hot->current_frame = rand() % bacteria_def->frame_count;
   hot->animation_timer = 0.0f;
+  hot->angle = 0.0f;
 
   cold->speed_scalar = speed_scalar;
   cold->speed = bacteria_def->base_speed * speed_scalar;
@@ -54,6 +55,14 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
   case ENEMY_ENTERING: {
 
     cold->t += deltaTime / 3.0f;
+
+    SDL_FPoint tangent = bezier_tangent(cold->entry_path.control_points[0],
+                                  cold->entry_path.control_points[1],
+                                  cold->entry_path.control_points[2],
+                                  cold->entry_path.control_points[3], cold->t);
+
+    hot->angle = atan2f(tangent.y, tangent.x) * (180.0f / M_PI) - 90.0f;
+
     SDL_FPoint pos = bezier_point(cold->entry_path.control_points[0],
                                   cold->entry_path.control_points[1],
                                   cold->entry_path.control_points[2],
@@ -66,6 +75,7 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
       cold->t = 1.0f; // clamp it
       cold->state = ENEMY_HOLDING;
       cold->state_start_time = SDL_GetTicks64();
+      hot->angle = 0.0f;
     }
 
     break;
