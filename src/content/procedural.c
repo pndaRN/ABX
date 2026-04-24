@@ -14,7 +14,7 @@ WaveParams level_to_params(int level) {
   wp.spawn_delay = 0.3f;
   wp.dive_delay = 2.0f / (block_position * 0.5 + 0.5);
   wp.threshold = .8;
-  wp.path_type = PATH_ARC;
+  wp.path_type = PATH_LINE_ISH;
   wp.formation_type = FORMATION_TYPE_LINE;
   return wp;
 }
@@ -119,11 +119,11 @@ SDL_FPoint generate_spawn_point(int level, int screen_width,
                                 int screen_height) {
   SDL_FPoint point;
   if (level <= 5) {
-    point.x = screen_width * SPAWN_POINT_FACTIONS[2].x;
-    point.y = screen_height * SPAWN_POINT_FACTIONS[2].y;
+    point.x = screen_width * SPAWN_POINT_FACTIONS[4].x;
+    point.y = screen_height * SPAWN_POINT_FACTIONS[4].y;
   } else { // TODO: INIT LEVEL > 5
-    point.x = screen_width * SPAWN_POINT_FACTIONS[2].x;
-    point.y = screen_height * SPAWN_POINT_FACTIONS[2].y;
+    point.x = screen_width * SPAWN_POINT_FACTIONS[4].x;
+    point.y = screen_height * SPAWN_POINT_FACTIONS[4].y;
   }
   return point;
 }
