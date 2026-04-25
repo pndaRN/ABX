@@ -7,4 +7,7 @@
 SDL_FPoint bezier_point(SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2,
                         SDL_FPoint p3, float t);
 
+SDL_FPoint bezier_tangent(SDL_FPoint p0, SDL_FPoint p1, SDL_FPoint p2,
+                          SDL_FPoint p3, float t);
+
 #endif
