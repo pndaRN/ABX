@@ -65,12 +65,13 @@ EntryPathData generate_path(PathType type, int screen_height, int screen_width,
     path.control_points[2].x = start.x + dx * (2.0f / 3.0f);
     path.control_points[2].y = start.y + dy * (2.0f / 3.0f);
 
-    offset = (start.x > screen_width / 2.0f) ? -screen_width * 0.06f
-                                             : screen_width * 0.06f;
+    offset = (start.x > screen_width / 2.0f) ? -screen_width * 0.04f
+                                             : screen_width * 0.04f;
     path.control_points[1].x += offset;
     path.control_points[2].x += offset;
 
     path.num_segments = 1;
+    path.type = type;
     break;
 
   case PATH_TIGHT_HOOK:

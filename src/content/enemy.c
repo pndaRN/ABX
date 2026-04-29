@@ -109,7 +109,15 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
       def->return_init(hot, cold, screen_height, screen_width, player_x);
       cold->return_initialized = true;
     }
-    cold->t += deltaTime / 2.0f;
+    cold->t += deltaTime / 1.5f;
+
+    SDL_FPoint tangent = bezier_tangent(
+        cold->entry_path.control_points[0], cold->entry_path.control_points[1],
+        cold->entry_path.control_points[2], cold->entry_path.control_points[3],
+        cold->t);
+
+    hot->angle = atan2f(tangent.y, tangent.x) * (180.0f / M_PI) - 90.0f;
+
     SDL_FPoint pos = bezier_point(cold->entry_path.control_points[0],
                                   cold->entry_path.control_points[1],
                                   cold->entry_path.control_points[2],

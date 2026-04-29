@@ -78,7 +78,8 @@ void strep_dive_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
     cold->state = ENEMY_RETURNING;
     cold->dive_initialized = false;
     cold->return_start_point.x = hot->x;
-    cold->return_start_point.y = screen_height - hot->height;
+    cold->return_start_point.y = 0 - hot->height;
+    cold->t = 0.0f;
   }
 }
 
