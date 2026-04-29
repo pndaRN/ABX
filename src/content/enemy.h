@@ -29,6 +29,7 @@ typedef struct EnemyCold {
   float t, speed, speed_scalar;
   DiveState dive_state;
   bool dive_initialized;
+  bool return_initialized;
   EntryPathData entry_path;
   int current_segment;
   SDL_FPoint formation_point, return_start_point;

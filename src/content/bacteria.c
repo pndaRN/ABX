@@ -84,6 +84,8 @@ void strep_dive_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
 
 void strep_return_init(EnemyHot *hot, EnemyCold *cold, int screen_height,
                        int screen_width, float player_x) {
+  (void)player_x;
+  (void)hot;
   cold->entry_path =
       generate_path(cold->entry_path.type, screen_height, screen_width,
                     cold->return_start_point, cold->formation_point);
@@ -252,6 +254,7 @@ static const BacteriaDefinition BACTERIA_DEFS[] = {
      .dive_type = DIVE_SINE,
      .dive_init = strep_dive_init,
      .dive_update = strep_dive_update,
+     .return_init = strep_return_init,
      .r = 0,
      .g = 200,
      .b = 0,

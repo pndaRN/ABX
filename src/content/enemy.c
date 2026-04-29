@@ -5,7 +5,6 @@
 
 #include <SDL2/SDL_rect.h>
 #include <math.h>
-// #include <stdlib.h>
 
 void enemy_init(EnemyHot *hot, EnemyCold *cold, float speed_scalar,
                 EntryPathData path_data, SDL_FPoint formation_position,
@@ -35,6 +34,7 @@ void enemy_init(EnemyHot *hot, EnemyCold *cold, float speed_scalar,
   cold->entry_path = path_data;
   cold->formation_point = formation_position;
   cold->dive_initialized = false;
+  cold->return_initialized = false;
 }
 
 void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
@@ -105,9 +105,26 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
 
   case ENEMY_RETURNING: {
     const BacteriaDefinition *def = get_bacteria_def(hot->species);
-    if (!cold->dive_initialized) {
-        def->return_update(hot, cold, deltaTime, screen_height, screen_width,
+    if (!cold->return_initialized) {
+      def->return_init(hot, cold, screen_height, screen_width, player_x);
+      cold->return_initialized = true;
+    }
+    cold->t += deltaTime / 2.0f;
+    SDL_FPoint pos = bezier_point(cold->entry_path.control_points[0],
+                                  cold->entry_path.control_points[1],
+                                  cold->entry_path.control_points[2],
+                                  cold->entry_path.control_points[3], cold->t);
+
+    hot->x = pos.x;
+    hot->y = pos.y;
+    if (cold->t >= 1.0f) {
+      cold->t = 1.0f; // clamp it
+      cold->state = ENEMY_HOLDING;
+      cold->state_start_time = SDL_GetTicks64();
+      cold->dive_initialized = false;
+      cold->return_initialized = false;
     }
     break;
   }
   }
+}
