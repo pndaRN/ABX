@@ -21,10 +21,9 @@ WaveParams level_to_params(int level) {
   return wp;
 }
 
-
-
 EntryPathData generate_path(PathType type, int screen_height, int screen_width,
                             SDL_FPoint start, SDL_FPoint end) {
+  (void)screen_height;
   EntryPathData path;
   path.num_segments = 0;
   float dx, dy;
@@ -50,6 +49,7 @@ EntryPathData generate_path(PathType type, int screen_height, int screen_width,
     path.control_points[2].x += offset;
 
     path.num_segments = 1;
+    path.type = type;
     break;
 
   case PATH_LINE_ISH:
@@ -110,11 +110,13 @@ typedef struct {
   int cols, max_rows, max_count;
 } LineLayout;
 
-static LineLayout line_compute_layout(FormationBounds bounds, float min_spacing, FormationParams params) {
+static LineLayout line_compute_layout(FormationBounds bounds, float min_spacing,
+                                      FormationParams params) {
   LineLayout layout;
 
   int width_capacity = (int)(bounds.width / min_spacing) - 1;
-  if (width_capacity < 1) width_capacity = 1;
+  if (width_capacity < 1)
+    width_capacity = 1;
 
   int cols = width_capacity;
   if (params.line.max_per_row > 0 && params.line.max_per_row < cols) {
@@ -124,22 +126,27 @@ static LineLayout line_compute_layout(FormationBounds bounds, float min_spacing,
 
   float row_spacing = min_spacing * params.line.row_spacing_fraction;
   layout.max_rows = (int)(bounds.height / row_spacing);
-  if (layout.max_rows < 1) layout.max_rows = 1;  
- 
+  if (layout.max_rows < 1)
+    layout.max_rows = 1;
+
   layout.max_count = layout.cols * layout.max_rows;
 
   return layout;
 }
 
-static bool line_fits(int count, float min_spacing, FormationBounds bounds, FormationParams params) {
+static bool line_fits(int count, float min_spacing, FormationBounds bounds,
+                      FormationParams params) {
   LineLayout layout = line_compute_layout(bounds, min_spacing, params);
   return count <= layout.max_count;
 }
 
-static void line_sizes (float min_spacing, FormationBounds bounds, FormationParams params, int *out_sizes, int *out_count, int max_sizes) {
+static void line_sizes(float min_spacing, FormationBounds bounds,
+                       FormationParams params, int *out_sizes, int *out_count,
+                       int max_sizes) {
   LineLayout layout = line_compute_layout(bounds, min_spacing, params);
   int n = layout.max_count;
-  if (n > max_sizes) n = max_sizes;
+  if (n > max_sizes)
+    n = max_sizes;
   for (int i = 0; i < n; i++) {
     out_sizes[i] = i + 1;
   }
@@ -156,14 +163,15 @@ static FormationResult line_generate(SDL_FPoint *positions, int count,
 
   float v_step = bounds.height / (float)(rows_used + 1);
 
-  for (int i = 0; i < placed; i ++) {
+  for (int i = 0; i < placed; i++) {
     int row = i / layout.cols;
     int col = i % layout.cols;
 
     int cols_in_row = layout.cols;
     if (row == rows_used - 1) {
       int remainder = placed % layout.cols;
-      if (remainder > 0) cols_in_row = remainder;
+      if (remainder > 0)
+        cols_in_row = remainder;
     }
 
     float h_step = bounds.width / (float)(cols_in_row + 1);
@@ -171,24 +179,27 @@ static FormationResult line_generate(SDL_FPoint *positions, int count,
     positions[i].y = bounds.y + (row + 1) * v_step;
   }
 
-  return (FormationResult){.placed = placed, .remaining = count - placed}; 
+  return (FormationResult){.placed = placed, .remaining = count - placed};
 }
 
 static const FormationDefinition FORMATION_DEFS[] = {
-  [FORMATION_TYPE_LINE] = {
-    .type = FORMATION_TYPE_LINE,
-    .fits = line_fits,
-    .sizes = line_sizes, 
-    .generate = line_generate,
-  },
+    [FORMATION_TYPE_LINE] =
+        {
+            .type = FORMATION_TYPE_LINE,
+            .fits = line_fits,
+            .sizes = line_sizes,
+            .generate = line_generate,
+        },
 };
 
 const FormationDefinition *get_formation_def(FormationType type) {
   return &FORMATION_DEFS[type];
 }
 
-FormationResult generate_formation(SDL_FPoint *positions, int count, float min_spacing,
-                        FormationType type, FormationParams params, FormationBounds bounds) {
+FormationResult generate_formation(SDL_FPoint *positions, int count,
+                                   float min_spacing, FormationType type,
+                                   FormationParams params,
+                                   FormationBounds bounds) {
   const FormationDefinition *def = get_formation_def(type);
   return def->generate(positions, count, min_spacing, bounds, params);
 }

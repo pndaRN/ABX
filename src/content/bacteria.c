@@ -1,23 +1,11 @@
 #include "bacteria.h"
 #include "enemy.h"
 #include "math_utils.h"
+#include "procedural.h"
 #include "shared_types.h"
 #include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
-void strep_dive_init(EnemyHot *hot, EnemyCold *cold, int screen_height,
-                     int screen_width, float player_x) {
-  (void)screen_width;
-  (void)screen_height;
-  (void)player_x;
-  cold->dive_state.type = DIVE_SINE;
-  cold->dive_state.sine.phase = 0.0f;
-  cold->dive_state.sine.amplitude = 10.0f;
-  cold->dive_state.sine.frequency = 1.0f;
-  cold->dive_state.sine.start_x = hot->x;
-  cold->dive_state.sine.dive_speed = 200.0;
-}
 
 void strep_hold_update(EnemyHot *hot, EnemyCold *cold, float deltaTime) {
   (void)deltaTime;
@@ -44,6 +32,19 @@ void strep_hold_update(EnemyHot *hot, EnemyCold *cold, float deltaTime) {
   hot->current_frame = (int)(cycle_position * def->frame_count);
   if (hot->current_frame >= def->frame_count)
     hot->current_frame = def->frame_count - 1;
+}
+
+void strep_dive_init(EnemyHot *hot, EnemyCold *cold, int screen_height,
+                     int screen_width, float player_x) {
+  (void)screen_width;
+  (void)screen_height;
+  (void)player_x;
+  cold->dive_state.type = DIVE_SINE;
+  cold->dive_state.sine.phase = 0.0f;
+  cold->dive_state.sine.amplitude = 10.0f;
+  cold->dive_state.sine.frequency = 1.0f;
+  cold->dive_state.sine.start_x = hot->x;
+  cold->dive_state.sine.dive_speed = 200.0;
 }
 
 void strep_dive_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
@@ -76,12 +77,16 @@ void strep_dive_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
   if (hot->y > screen_height) {
     cold->state = ENEMY_RETURNING;
     cold->dive_initialized = false;
+    cold->return_start_point.x = hot->x;
+    cold->return_start_point.y = screen_height - hot->height;
   }
 }
 
-void strep_return_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
-                         int screen_height, int screen_width, float player_x) {
-  (void)screen_width;
+void strep_return_init(EnemyHot *hot, EnemyCold *cold, int screen_height,
+                       int screen_width, float player_x) {
+  cold->entry_path =
+      generate_path(cold->entry_path.type, screen_height, screen_width,
+                    cold->return_start_point, cold->formation_point);
 }
 
 void staph_dive_init(EnemyHot *hot, EnemyCold *cold, int screen_height,

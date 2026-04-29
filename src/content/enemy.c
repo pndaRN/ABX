@@ -104,49 +104,10 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
   }
 
   case ENEMY_RETURNING: {
+    const BacteriaDefinition *def = get_bacteria_def(hot->species);
     if (!cold->dive_initialized) {
-      cold->entry_path.control_points[0].x = hot->x;
-      cold->entry_path.control_points[0].y = 0 - hot->height;
-      cold->entry_path.control_points[3].x = cold->formation_point.x;
-      cold->entry_path.control_points[3].y = cold->formation_point.y;
-
-      float dx = cold->entry_path.control_points[3].x -
-                 cold->entry_path.control_points[0].x;
-      float dy = cold->entry_path.control_points[3].y -
-                 cold->entry_path.control_points[0].y;
-
-      cold->entry_path.control_points[1].x =
-          cold->entry_path.control_points[0].x + dx * (1.0f / 3.0f);
-      cold->entry_path.control_points[1].y =
-          cold->entry_path.control_points[0].y + dy * (1.0f / 3.0f);
-
-      cold->entry_path.control_points[2].x =
-          cold->entry_path.control_points[0].x + dx * (2.0f / 3.0f);
-      cold->entry_path.control_points[2].y =
-          cold->entry_path.control_points[0].y + dy * (2.0f / 3.0f);
-
-      float offset = (hot->x > screen_width / 2.0f) ? -150.0f : 150.0f;
-      cold->entry_path.control_points[1].x += offset;
-      cold->entry_path.control_points[2].x += offset;
-
-      cold->t = 0.0f;
-      cold->dive_initialized = true;
-    }
-    cold->t += deltaTime / 2.0f;
-    SDL_FPoint pos = bezier_point(cold->entry_path.control_points[0],
-                                  cold->entry_path.control_points[1],
-                                  cold->entry_path.control_points[2],
-                                  cold->entry_path.control_points[3], cold->t);
-
-    hot->x = pos.x;
-    hot->y = pos.y;
-    if (cold->t >= 1.0f) {
-      cold->t = 1.0f; // clamp it
-      cold->state = ENEMY_HOLDING;
-      cold->state_start_time = SDL_GetTicks64();
-      cold->dive_initialized = false;
+        def->return_update(hot, cold, deltaTime, screen_height, screen_width,
     }
     break;
   }
   }
-}

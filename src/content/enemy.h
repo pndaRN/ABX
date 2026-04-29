@@ -31,7 +31,7 @@ typedef struct EnemyCold {
   bool dive_initialized;
   EntryPathData entry_path;
   int current_segment;
-  SDL_FPoint formation_point;
+  SDL_FPoint formation_point, return_start_point;
 } EnemyCold;
 
 void enemy_init(EnemyHot *hot, EnemyCold *cold, float speed_scalar,

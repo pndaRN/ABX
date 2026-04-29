@@ -25,6 +25,7 @@ typedef enum {
 typedef struct {
   SDL_FPoint control_points[8];
   int num_segments;
+  PathType type;
 } EntryPathData;
 
 typedef struct {
@@ -37,8 +38,8 @@ typedef struct {
 
 typedef union {
   struct {
-        int max_per_row;
-        float row_spacing_fraction;
+    int max_per_row;
+    float row_spacing_fraction;
   } line;
   struct {
     float apex_angle;
@@ -47,7 +48,7 @@ typedef union {
     float radius_fraction;
   } circle;
   struct {
-    int rows; 
+    int rows;
   } stagger;
   struct {
     float aspect_ratio;
@@ -62,12 +63,17 @@ typedef struct {
   int remaining;
 } FormationResult;
 
-typedef bool (*FormationFitsFn)(int count, float min_spacing, FormationBounds bounds, FormationParams params);
+typedef bool (*FormationFitsFn)(int count, float min_spacing,
+                                FormationBounds bounds, FormationParams params);
 
-typedef void (*FormationSizesFn)(float min_spacing, FormationBounds bounds, FormationParams params,
-                                int *out_sizes, int *out_count, int max_sizes);
-                              
-typedef FormationResult (*FormationGenFn)(SDL_FPoint *positions, int count, float min_spacing, FormationBounds bounds, FormationParams params);
+typedef void (*FormationSizesFn)(float min_spacing, FormationBounds bounds,
+                                 FormationParams params, int *out_sizes,
+                                 int *out_count, int max_sizes);
+
+typedef FormationResult (*FormationGenFn)(SDL_FPoint *positions, int count,
+                                          float min_spacing,
+                                          FormationBounds bounds,
+                                          FormationParams params);
 
 typedef struct {
   FormationType type;
@@ -86,9 +92,10 @@ typedef struct {
 
 WaveParams level_to_params(int level);
 
-FormationResult generate_formation(SDL_FPoint *positions, int count, float min_spacing, 
-                        FormationType type, FormationParams params,
-                        FormationBounds bounds);
+FormationResult generate_formation(SDL_FPoint *positions, int count,
+                                   float min_spacing, FormationType type,
+                                   FormationParams params,
+                                   FormationBounds bounds);
 
 EntryPathData generate_path(PathType type, int screen_height, int screen_width,
                             SDL_FPoint start, SDL_FPoint end);
