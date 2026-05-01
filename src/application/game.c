@@ -45,6 +45,7 @@ void game_render(const GameState *state, SDL_Renderer *renderer) {
     render_game_world(state, renderer);
     break;
   case STATE_LEVEL_TRANSITION:
+    render_game_world(state, renderer);
     break;
   }
   SDL_RenderPresent(renderer);
@@ -62,9 +63,9 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
       state->mode = STATE_LEVEL_TRANSITION;
       state->level.level_end = false;
       for (int i = 0; i < MAX_ENEMIES; i++) {
-          if(state->enemy_hot[i].active) {
-              state->enemy_cold[i].should_flee = true;
-          }
+        if (state->enemy_hot[i].active) {
+          state->enemy_cold[i].should_flee = true;
+        }
       }
     }
     for (int i = 0; i < MAX_BULLETS; i++) {
@@ -85,11 +86,11 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
     break;
   case STATE_GAME_OVER:
     break;
-  case STATE_LEVEL_TRANSITION:{
+  case STATE_LEVEL_TRANSITION: {
     int active_count = 0;
     for (int i = 0; i < MAX_ENEMIES; i++) {
       if (state->enemy_hot[i].active) {
-          enemy_update(&state->enemy_hot[i], &state->enemy_cold[i], deltaTime,
+        enemy_update(&state->enemy_hot[i], &state->enemy_cold[i], deltaTime,
                      SCREEN_HEIGHT, SCREEN_WIDTH, state->player.x);
       }
       if (state->enemy_hot[i].active) {
