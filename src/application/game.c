@@ -17,7 +17,7 @@ static void render_game_world(const GameState *state, SDL_Renderer *renderer);
 void game_init(GameState *state, SDL_Renderer *renderer) {
   assets_init(&state->assets, renderer);
   state->player = player_create(SCREEN_WIDTH, SCREEN_HEIGHT);
-  state->level = level_init(8, SCREEN_HEIGHT, SCREEN_WIDTH);
+  state->level = level_init(1, SCREEN_HEIGHT, SCREEN_WIDTH);
 
   for (int i = 0; i < MAX_BULLETS; i++) {
     state->bullets[i].active = false;
@@ -58,14 +58,13 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
     player_update(&state->player, keystate, deltaTime, SCREEN_WIDTH);
     level_update(&state->level, deltaTime, state->enemy_hot, state->enemy_cold,
                  MAX_ENEMIES);
-    if (state->level.level_end == true) {
-      int new_level = state->level.level + 1;
-      state->level = level_init(new_level, SCREEN_HEIGHT, SCREEN_WIDTH);
+    if (state->level.level_end) {
+      state->mode = STATE_LEVEL_TRANSITION;
+      state->level.level_end = false;
       for (int i = 0; i < MAX_ENEMIES; i++) {
-        state->enemy_hot[i].active = false;
-      }
-      for (int i = 0; i < MAX_BULLETS; i++) {
-        state->bullets[i].active = false;
+          if(state->enemy_hot[i].active) {
+              state->enemy_cold[i].should_flee = true;
+          }
       }
     }
     for (int i = 0; i < MAX_BULLETS; i++) {
@@ -86,8 +85,30 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
     break;
   case STATE_GAME_OVER:
     break;
-  case STATE_LEVEL_TRANSITION:
+  case STATE_LEVEL_TRANSITION:{
+    int active_count = 0;
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+      if (state->enemy_hot[i].active) {
+          enemy_update(&state->enemy_hot[i], &state->enemy_cold[i], deltaTime,
+                     SCREEN_HEIGHT, SCREEN_WIDTH, state->player.x);
+      }
+      if (state->enemy_hot[i].active) {
+        active_count++;
+      }
+    }
+    if (active_count == 0) {
+      int new_level = state->level.level + 1;
+      state->level = level_init(new_level, SCREEN_HEIGHT, SCREEN_WIDTH);
+      for (int i = 0; i < MAX_ENEMIES; i++) {
+        state->enemy_hot[i].active = false;
+      }
+      for (int i = 0; i < MAX_BULLETS; i++) {
+        state->bullets[i].active = false;
+      }
+      state->mode = STATE_PLAYING;
+    }
     break;
+  }
   }
 }
 

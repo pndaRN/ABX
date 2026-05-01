@@ -12,7 +12,8 @@ typedef enum {
   ENEMY_ENTERING,
   ENEMY_HOLDING,
   ENEMY_DIVING,
-  ENEMY_RETURNING
+  ENEMY_RETURNING,
+  ENEMY_FLEE
 } EnemyState;
 
 typedef struct EnemyHot {
@@ -30,9 +31,11 @@ typedef struct EnemyCold {
   DiveState dive_state;
   bool dive_initialized;
   bool return_initialized;
+  bool should_flee;
   EntryPathData entry_path;
   int current_segment;
   SDL_FPoint formation_point, return_start_point;
+
 } EnemyCold;
 
 void enemy_init(EnemyHot *hot, EnemyCold *cold, float speed_scalar,

@@ -35,6 +35,7 @@ void enemy_init(EnemyHot *hot, EnemyCold *cold, float speed_scalar,
   cold->formation_point = formation_position;
   cold->dive_initialized = false;
   cold->return_initialized = false;
+  cold->should_flee = false;
 }
 
 void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
@@ -82,6 +83,10 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
 
   case ENEMY_HOLDING: {
     const BacteriaDefinition *def = get_bacteria_def(hot->species);
+    if (cold->should_flee) {
+      cold->state = ENEMY_FLEE;
+      break;
+    }
     hot->angle = hot->angle + (0.0f - hot->angle) * (deltaTime * 3.0f);
     if (def->hold_update) {
       def->hold_update(hot, cold, deltaTime);
@@ -128,6 +133,10 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
     hot->x = pos.x;
     hot->y = pos.y;
     if (cold->t >= 1.0f) {
+      if (cold->should_flee) {
+        cold->state = ENEMY_FLEE;
+        break;
+      }
       cold->t = 1.0f; // clamp it
       cold->state = ENEMY_HOLDING;
       cold->state_start_time = SDL_GetTicks64();
@@ -135,6 +144,30 @@ void enemy_update(EnemyHot *hot, EnemyCold *cold, float deltaTime,
       cold->return_initialized = false;
     }
     break;
+  }
+
+  case ENEMY_FLEE: {
+      cold->t -= deltaTime / 1.0f;
+      if (cold->t <= 0.0f) {
+          hot->active = false;
+          break;
+      }
+
+      SDL_FPoint tangent = bezier_tangent(
+          cold->entry_path.control_points[0], cold->entry_path.control_points[1],
+          cold->entry_path.control_points[2], cold->entry_path.control_points[3],
+          cold->t);
+
+      hot->angle = atan2f(tangent.y, tangent.x) * (180.0f / M_PI) - 90.0f;
+
+      SDL_FPoint pos = bezier_point(cold->entry_path.control_points[0],
+                                    cold->entry_path.control_points[1],
+                                    cold->entry_path.control_points[2],
+                                    cold->entry_path.control_points[3],
+                                   cold->t);
+      hot->x = pos.x;
+      hot->y = pos.y;
+      break;
   }
   }
 }
