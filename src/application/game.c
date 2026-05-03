@@ -87,6 +87,7 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
   case STATE_GAME_OVER:
     break;
   case STATE_LEVEL_TRANSITION: {
+    player_update(&state->player, keystate, deltaTime, SCREEN_WIDTH);
     int active_count = 0;
     for (int i = 0; i < MAX_ENEMIES; i++) {
       if (state->enemy_hot[i].active) {
@@ -95,6 +96,11 @@ void game_update(GameState *state, float deltaTime, const Uint8 *keystate) {
       }
       if (state->enemy_hot[i].active) {
         active_count++;
+      }
+    }
+    for (int i = 0; i < MAX_BULLETS; i++) {
+      if (state->bullets[i].active) {
+        bullet_update(&state->bullets[i], deltaTime);
       }
     }
     if (active_count == 0) {
